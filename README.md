@@ -7,8 +7,11 @@
 
 # Installation
 1. Clone project
-
 ```Git
 git clone https://github.com/NysoS/ProjectGT3.git
 ``` 
 2. Open the project with Unity
+3. Get All branch (only after clone project)
+```Git
+git fetch
+``` 
