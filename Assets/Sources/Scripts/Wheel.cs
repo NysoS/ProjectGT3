@@ -25,25 +25,50 @@ namespace ProjectGT3
         [SerializeField]
         private WheelCollider wheelCollider;
 
-        [SerializeField]
+
         public wheelConfiguration wheelConfiguration;
+
+        private WheelFrictionCurve frictionCurve;
+
+        [SerializeField]
+        private float extremumValue = 1f;
+
+        [SerializeField]
+        private float asymptoteValue = 1f;
+
+        [SerializeField]
+        private float stiffness = 1f;
+
+        [SerializeField]
+        private float noDriftForce = 1f;
+
+        [SerializeField]
+        private float driftForce = 10f;
 
         // Start is called before the first frame update
         void Start()
         {
-        
+            frictionCurve.extremumSlip = .8f;
+            frictionCurve.extremumValue = extremumValue;
+            frictionCurve.asymptoteSlip = 1.4f;
+            frictionCurve.asymptoteValue = asymptoteValue;
+            frictionCurve.stiffness = stiffness;
         }
 
-        // Update is called once per frame
-        void FixedUpdate()
+        private void FixedUpdate()
         {
             UpdatePos();
+            wheelCollider.forwardFriction = frictionCurve;
+
         }
+
 
         public void WheelTorque(float torqueValue)
         {
-            if(wheelConfiguration == wheelConfiguration.Motor || wheelConfiguration == wheelConfiguration.Both)
+            frictionCurve.asymptoteValue = noDriftForce;
+            if (wheelConfiguration == wheelConfiguration.Motor || wheelConfiguration == wheelConfiguration.Both)
             {
+                
                 wheelCollider.motorTorque = torqueValue;
                 wheelCollider.brakeTorque = 0;
             }
@@ -52,13 +77,28 @@ namespace ProjectGT3
                 wheelCollider.motorTorque = 0;
                 wheelCollider.brakeTorque = 0;
             }
+            
         }
 
-        public void WheelBrake(float brakeValue)
+        public void WheelBrake(float brakeValue,wheelConfiguration wheelConfiguration)
         {
-            wheelCollider.motorTorque = 0;
-            wheelCollider.brakeTorque = brakeValue;
+            if(wheelConfiguration == wheelConfiguration.Motor || wheelConfiguration == wheelConfiguration.Both)
+            {
+                wheelCollider.motorTorque = 0;
+                wheelCollider.brakeTorque = brakeValue;
+            }
         }
+
+        public void WheelDrift()
+        {
+            
+            if (wheelConfiguration == wheelConfiguration.Motor || wheelConfiguration == wheelConfiguration.Both)
+            {
+                frictionCurve.asymptoteValue = driftForce;
+            }
+            
+        }
+
 
         public void WheelSteer(float steerValue)
         {
