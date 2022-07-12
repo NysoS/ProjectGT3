@@ -11,6 +11,13 @@ using UnityEngine.InputSystem;
 
 namespace ProjectGT3
 {
+    public enum CarState
+    {
+        Idle,
+        Forward,
+        Back
+    }
+
     [RequireComponent(typeof(Rigidbody))]
     public class CarController : MonoBehaviour
     {
@@ -27,7 +34,7 @@ namespace ProjectGT3
         private float maxSteer = 10f;
 
         [SerializeField]
-        private float acceleration;
+        private float coefAcceleration, coefDeceleration;
 
         [SerializeField]
         private Wheel[] wheels;
@@ -39,6 +46,10 @@ namespace ProjectGT3
 
         private float axisValue;
         private bool drift = false;
+
+        public float speed;
+        public CarState carState = CarState.Idle;
+        public CarState nextcarState = CarState.Idle;
 
         private void Awake()
         {
@@ -57,42 +68,65 @@ namespace ProjectGT3
             
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-            MoveCar();
-        }
+    
 
         private void FixedUpdate()
         {
-
-            
+            speed = rb.velocity.magnitude * 3.6f;
+            MoveCar();
         }
 
         void MoveCar()
         {
             bool forward = axisValue > 0 ? true : false;
             bool backward = axisValue < 0 ? true : false;
-            
+
             foreach (Wheel wheel in wheels)
             {
+
+                if(forward && speed > 0.1f)
+                {
+                    nextcarState = CarState.Forward;
+                }
+                else if(backward && speed > 0.1f)
+                {
+                    nextcarState = CarState.Back;
+                }else if(speed < 0.1f)
+                {
+                    nextcarState = CarState.Idle;
+                }
+
                 if (drift)
                 {
-                    wheel.WheelBrake(brakeForce * acceleration * Time.deltaTime * 1000f);
+                    //wheel.WheelBrake(brakeForce  * Time.deltaTime);
+                    wheel.WheelDrift();
                 }
                 else
                 {
+
                     if (forward || backward)
                     {
-                   
-                       wheel.WheelTorque(torque * axisValue * acceleration * Time.deltaTime * 2000f);
+                       if (carState != nextcarState && carState != CarState.Idle)
+                        {
+                            wheel.WheelBrake(brakeForce, wheelConfiguration.Motor);
+                            
+                            if(speed <= 0.1f)
+                            {
+                                carState = nextcarState;
+                            }
+                        }
+                        else
+                        {
+                            carState = nextcarState;
+                            wheel.WheelTorque(axisValue * torque * coefAcceleration * Time.deltaTime);
+                        }
                     }
                     else
                     {
-                        wheel.WheelTorque(0);
+                        wheel.WheelBrake(brakeSmooth * coefDeceleration * Time.deltaTime,wheelConfiguration.Motor);
                     }
                 }
-               
+                
             }
         }
 
