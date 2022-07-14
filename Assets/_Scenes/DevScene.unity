@@ -247,7 +247,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 150907306}
-  m_LocalRotation: {x: 0.39416206, y: -0.00000002236348, z: 0.00000000959134, w: 0.919041}
+  m_LocalRotation: {x: 0.39416203, y: 0.000000022363478, z: -0.000000009591339, w: 0.919041}
   m_LocalPosition: {x: 4.238, y: 7.557, z: -1.2115266}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1478,7 +1478,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1979893625}
-  m_LocalRotation: {x: 0.39416206, y: -0.00000002236348, z: 0.00000000959134, w: 0.919041}
+  m_LocalRotation: {x: 0.39416203, y: 0.000000022363478, z: -0.000000009591339, w: 0.919041}
   m_LocalPosition: {x: 4.238, y: 7.557, z: -1.2115266}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1903,7 +1903,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   torque: 50000
   brakeSmooth: 5000
-  brakeForce: 10000
+  brakeForce: 4000
   maxSteer: 45
   coefAcceleration: 3
   coefDeceleration: 3
