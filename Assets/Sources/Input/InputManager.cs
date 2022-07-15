@@ -55,6 +55,24 @@ namespace ProjectGT3.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DownGear"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""a380f2dd-3a6b-48ad-99a9-82f286a76894"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""UpGear"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""41a003c2-18e6-4752-8446-33419e7c35eb"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -134,6 +152,28 @@ namespace ProjectGT3.Input
                     ""action"": ""Drift"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1325f243-d6bf-4f57-aace-aaa8dda07fca"",
+                    ""path"": ""<XInputController>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DownGear"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b581a4c0-d41c-49ef-9ef6-932e15a6725c"",
+                    ""path"": ""<XInputController>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UpGear"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -145,6 +185,8 @@ namespace ProjectGT3.Input
             m_CarControl_MoveForward = m_CarControl.FindAction("MoveForward", throwIfNotFound: true);
             m_CarControl_TurnRight = m_CarControl.FindAction("TurnRight", throwIfNotFound: true);
             m_CarControl_Drift = m_CarControl.FindAction("Drift", throwIfNotFound: true);
+            m_CarControl_DownGear = m_CarControl.FindAction("DownGear", throwIfNotFound: true);
+            m_CarControl_UpGear = m_CarControl.FindAction("UpGear", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -207,6 +249,8 @@ namespace ProjectGT3.Input
         private readonly InputAction m_CarControl_MoveForward;
         private readonly InputAction m_CarControl_TurnRight;
         private readonly InputAction m_CarControl_Drift;
+        private readonly InputAction m_CarControl_DownGear;
+        private readonly InputAction m_CarControl_UpGear;
         public struct CarControlActions
         {
             private @InputManager m_Wrapper;
@@ -214,6 +258,8 @@ namespace ProjectGT3.Input
             public InputAction @MoveForward => m_Wrapper.m_CarControl_MoveForward;
             public InputAction @TurnRight => m_Wrapper.m_CarControl_TurnRight;
             public InputAction @Drift => m_Wrapper.m_CarControl_Drift;
+            public InputAction @DownGear => m_Wrapper.m_CarControl_DownGear;
+            public InputAction @UpGear => m_Wrapper.m_CarControl_UpGear;
             public InputActionMap Get() { return m_Wrapper.m_CarControl; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -232,6 +278,12 @@ namespace ProjectGT3.Input
                     @Drift.started -= m_Wrapper.m_CarControlActionsCallbackInterface.OnDrift;
                     @Drift.performed -= m_Wrapper.m_CarControlActionsCallbackInterface.OnDrift;
                     @Drift.canceled -= m_Wrapper.m_CarControlActionsCallbackInterface.OnDrift;
+                    @DownGear.started -= m_Wrapper.m_CarControlActionsCallbackInterface.OnDownGear;
+                    @DownGear.performed -= m_Wrapper.m_CarControlActionsCallbackInterface.OnDownGear;
+                    @DownGear.canceled -= m_Wrapper.m_CarControlActionsCallbackInterface.OnDownGear;
+                    @UpGear.started -= m_Wrapper.m_CarControlActionsCallbackInterface.OnUpGear;
+                    @UpGear.performed -= m_Wrapper.m_CarControlActionsCallbackInterface.OnUpGear;
+                    @UpGear.canceled -= m_Wrapper.m_CarControlActionsCallbackInterface.OnUpGear;
                 }
                 m_Wrapper.m_CarControlActionsCallbackInterface = instance;
                 if (instance != null)
@@ -245,6 +297,12 @@ namespace ProjectGT3.Input
                     @Drift.started += instance.OnDrift;
                     @Drift.performed += instance.OnDrift;
                     @Drift.canceled += instance.OnDrift;
+                    @DownGear.started += instance.OnDownGear;
+                    @DownGear.performed += instance.OnDownGear;
+                    @DownGear.canceled += instance.OnDownGear;
+                    @UpGear.started += instance.OnUpGear;
+                    @UpGear.performed += instance.OnUpGear;
+                    @UpGear.canceled += instance.OnUpGear;
                 }
             }
         }
@@ -254,6 +312,8 @@ namespace ProjectGT3.Input
             void OnMoveForward(InputAction.CallbackContext context);
             void OnTurnRight(InputAction.CallbackContext context);
             void OnDrift(InputAction.CallbackContext context);
+            void OnDownGear(InputAction.CallbackContext context);
+            void OnUpGear(InputAction.CallbackContext context);
         }
     }
 }

@@ -45,6 +45,8 @@ namespace ProjectGT3
         [SerializeField]
         private float driftForce = 10f;
 
+        public float wheelRmp { get; set; }
+
         // Start is called before the first frame update
         void Start()
         {
@@ -55,11 +57,15 @@ namespace ProjectGT3
             frictionCurve.stiffness = stiffness;
         }
 
+        private void Update()
+        {
+            wheelRmp = wheelCollider.rpm;
+        }
+
         private void FixedUpdate()
         {
             UpdatePos();
             wheelCollider.forwardFriction = frictionCurve;
-
         }
 
 
@@ -82,11 +88,11 @@ namespace ProjectGT3
 
         public void WheelBrake(float brakeValue,wheelConfiguration wheelConfiguration)
         {
-            if(wheelConfiguration == wheelConfiguration.Motor || wheelConfiguration == wheelConfiguration.Both)
-            {
+           // if(wheelConfiguration == wheelConfiguration.Motor || wheelConfiguration == wheelConfiguration.Both)
+         //   {
                 wheelCollider.motorTorque = 0;
                 wheelCollider.brakeTorque = brakeValue;
-            }
+           // }
         }
 
         public void WheelDrift()
